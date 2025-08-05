@@ -1,96 +1,123 @@
-{ config, pkgs, inputs, hyprland, portal, ... }:
+{ config, lib, pkgs, inputs, hyprland, ... }:
 
 {
   imports = [
-    # ./hardware-configuration.nix # Раскомментируйте когда сгенерируете
+    ./hardware-configuration.nix
   ];
+
+  # Nix settings
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
 
-  # Bootloader
+  # Boot loader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Базовая конфигурация файловой системы (замените на свою)
-  fileSystems."/" = {
-    device = "/dev/disk/by-label/nixos";
-    fsType = "ext4";
+  # LUKS encryption
+  boot.initrd.luks.devices."nixos-root" = {
+    device = "/dev/nvme0n1p2";
+    preLVM = true;
+    allowDiscards = true;
   };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-label/boot";
-    fsType = "vfat";
-  };
+  # Hibernation
+  boot.resumeDevice = "/dev/vg0/swap";
+  boot.kernelParams = [ "resume=/dev/vg0/swap" ];
 
+  # Networking
   networking.hostName = "PC-NixOS";
   networking.networkmanager.enable = true;
 
-  i18n = {
-    defaultLocale = "ru_RU.UTF-8";
-    extraLocaleSettings = {
-      LC_TIME = "en_US.UTF-8";
-      LC_MONETARY = "en_US.UTF-8";
-    };
+  # Localization
+  time.timeZone = "Europe/Moscow";
+  i18n.defaultLocale = "ru_RU.UTF-8";
+  i18n.extraLocaleSettings = {
+    LC_TIME = "en_US.UTF-8";
+    LC_MONETARY = "en_US.UTF-8";
   };
 
-  console.keyMap = "us,ru";
-  console.font = "Lat2-Terminus16";
+  # Console
+  console = {
+    keyMap = "us";
+    font = "Lat2-Terminus16";
+  };
 
-  # User
+  # Users
   users.users.artfil-nixos = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "video" "audio" "bluetooth" ];
-    # Установите пароль: passwd artfil-nixos после установки
+    extraGroups = [ "wheel" "networkmanager" "video" "audio" ];
   };
-  
-  # Разрешить sudo без пароля для группы wheel
-  security.sudo.wheelNeedsPassword = false;
-  
-  users.mutableUsers = true; # Разрешить изменение паролей
 
-  # Autologin on tty1
+  # Security
+  security.sudo.wheelNeedsPassword = false;
+  users.mutableUsers = true;
+
+  # Autologin
   services.getty.autologinUser = "artfil-nixos";
 
-  # Nvidia
+  # NVIDIA
   hardware.nvidia = {
     modesetting.enable = true;
-    package = pkgs.linuxPackages.nvidia_x11;
+    package = config.boot.kernelPackages.nvidiaPackages.production;
     powerManagement.enable = true;
+    open = false;
   };
+
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+  };
+
   services.xserver.enable = false;
   services.xserver.videoDrivers = [ "nvidia" ];
 
-  # Hyprland + Wayland
+  # Hyprland
   programs.hyprland = {
     enable = true;
-    package = hyprland;
+    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    xwayland.enable = true;
   };
 
+  # XDG Portal
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-hyprland
+      xdg-desktop-portal-gtk
+    ];
+  };
+
+  # System packages
   environment.systemPackages = with pkgs; [
-    kitty neovim firefox waybar wofi kanshi
-  ] ++ [ hyprland ];
+    vim neovim git curl wget
+    kitty firefox
+    waybar wofi
+    networkmanager
+  ];
 
   # Audio
-  sound.enable = true;
+  sound.enable = false;
+  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     audio.enable = true;
     pulse.enable = true;
     alsa.enable = true;
   };
-  security.rtkit.enable = true;
 
   # Bluetooth
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
-  # Swap file (10 GB)
-  swapDevices = [{
-    device = "/swapfile";
-    size = 10 * 1024 * 1024 * 1024;
-  }];
+  # Fonts
+  fonts.packages = with pkgs; [
+    dejavu_fonts
+    liberation_ttf
+  ];
 
-  # Timezone
-  time.timeZone = "Europe/Moscow";
+  # SSH
+  services.openssh.enable = true;
 
   # System version
   system.stateVersion = "24.05";
