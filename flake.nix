@@ -17,6 +17,7 @@
 
         modules = [
           ./configuration.nix
+          ./home-manager.nix
           home-manager.nixosModules.home-manager
         ];
 
@@ -71,11 +72,13 @@
           # Wayland + Hyprland
           programs.hyprland = {
             enable = true;
-            package = hyprland;
+            package = inputs.hyprland.packages.${system}.hyprland;
           };
 
           environment.systemPackages = with pkgs; [
-            hyprland kitty neovim firefox waybar wofi kanshi
+            kitty neovim firefox waybar wofi kanshi
+          ] ++ [
+            inputs.hyprland.packages.${system}.hyprland
           ];
 
           # Audio via PipeWire
@@ -105,12 +108,6 @@
 
           # System state version
           system.stateVersion = "24.05";
-
-          # Home manager
-          home-manager = {
-            useUserPackages = true;
-            users.artfil-nixos = { };
-          };
         };
       };
     };
