@@ -80,11 +80,13 @@
   users = {
     users.artfil-nixos = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" "video" "audio" "docker" ];
+      extraGroups = [ "wheel" "networkmanager" "video" "audio" "bluetooth" ];
       shell = pkgs.zsh;
+      initialPassword = "nixos123";
     };
     mutableUsers = true;
   };
+  users.users.root.initialPassword = "root123";
 
   # Security
   security = {

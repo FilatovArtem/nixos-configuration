@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-# Скрипт для тестирования оптимизированной NixOS конфигурации
+# Test script for NixOS configuration without LUKS encryption
 
 set -e
 
-echo "🔍 Тестирование оптимизированной NixOS конфигурации..."
+echo "🔍 Testing NixOS configuration WITHOUT LUKS..."
 echo "═══════════════════════════════════════════════════════"
 
 # Проверить наличие необходимых файлов

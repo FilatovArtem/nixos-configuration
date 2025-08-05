@@ -235,7 +235,9 @@ EOF
   users.users.artfil-nixos = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "video" "audio" "bluetooth" ];
+    initialPassword = "nixos123";
   };
+  users.users.root.initialPassword = "root123";
   users.mutableUsers = true;
   security.sudo.wheelNeedsPassword = false;
 
@@ -447,9 +449,10 @@ echo "• Gaming-ready system"
 echo "• Auto-login user"
 echo
 echo "Next steps:"
-echo "1. System will boot automatically WITHOUT passwords"
-echo "2. Set user password: passwd artfil-nixos"
-echo "3. Enjoy NixOS!"
+echo "1. Login: artfil-nixos | Password: nixos123"
+echo "2. Root login: root | Password: root123"
+echo "3. Change passwords: passwd artfil-nixos && sudo passwd root"
+echo "4. Enjoy NixOS!"
 echo
 echo "Useful commands:"
 echo "• nixos-rebuild switch  - apply configuration changes"
