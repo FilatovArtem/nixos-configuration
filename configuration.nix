@@ -1,11 +1,25 @@
 { config, pkgs, inputs, hyprland, portal, ... }:
 
 {
+  imports = [
+    # ./hardware-configuration.nix # Раскомментируйте когда сгенерируете
+  ];
   nixpkgs.config.allowUnfree = true;
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  # Базовая конфигурация файловой системы (замените на свою)
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixos";
+    fsType = "ext4";
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-label/boot";
+    fsType = "vfat";
+  };
 
   networking.hostName = "PC-NixOS";
   networking.networkmanager.enable = true;
@@ -25,13 +39,16 @@
   users.users.artfil-nixos = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "video" "audio" "bluetooth" ];
+    # Установите пароль: passwd artfil-nixos после установки
   };
-  users.mutableUsers = false;
+  
+  # Разрешить sudo без пароля для группы wheel
+  security.sudo.wheelNeedsPassword = false;
+  
+  users.mutableUsers = true; # Разрешить изменение паролей
 
   # Autologin on tty1
-  services.getty.autologin.enable = true;
-  services.getty.autologin.user = "artfil-nixos";
-  services.getty.autologin.tty = "tty1";
+  services.getty.autologinUser = "artfil-nixos";
 
   # Nvidia
   hardware.nvidia = {
@@ -64,7 +81,7 @@
 
   # Bluetooth
   hardware.bluetooth.enable = true;
-  services.bluetooth.enable = true;
+  services.blueman.enable = true;
 
   # Swap file (10 GB)
   swapDevices = [{
