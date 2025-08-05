@@ -1,18 +1,24 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, inputs, lib, ... }:
 
+let
+  username = "artfil-nixos";
+in
 {
-  home-manager.useUserPackages = true;
-  home-manager.users.artfil-nixos = {
+  home-manager.users.${username} = { ... }: {
     home.stateVersion = "24.05";
-    
-    # Базовые настройки home-manager
-    home.packages = with pkgs; [
-      # Здесь можно добавить пакеты для пользователя
-    ];
-    
-    # Конфигурация программ
-    programs = {
-      # Например, конфигурация для neovim, git и т.д.
+
+    programs.zsh.enable = true;
+    programs.git = {
+      enable = true;
+      userName = "Your Name";
+      userEmail = "your.email@example.com";
     };
+
+    home.packages = with pkgs; [
+      fastfetch bat eza btop ripgrep fzf yazi
+    ];
+
+    # Пример конфигурации Hyprland (если нужно)
+    # wayland.windowManager.hyprland.enable = true;
   };
-} 
+}
