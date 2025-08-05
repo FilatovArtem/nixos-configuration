@@ -76,7 +76,12 @@ sudo ./semi-automated-install-en.sh
 sudo ./fix-tty-encoding.sh
 ```
 
-**Подробности**: [INSTALLATION.md](INSTALLATION.md)
+#### 🚨 Проблемы загрузки после установки?
+```bash
+sudo ./fix-boot-luks.sh
+```
+
+**Подробности**: [INSTALLATION.md](INSTALLATION.md) | [BOOT-TROUBLESHOOTING.md](BOOT-TROUBLESHOOTING.md)
 
 ### Тестирование конфигурации
 ```bash
