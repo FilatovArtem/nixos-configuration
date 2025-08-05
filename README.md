@@ -18,10 +18,15 @@
 - Автоматическая оптимизация Nix store
 
 ### 🛡️ Безопасность  
-- Полное LUKS шифрование диска
+- **Два варианта**: с LUKS шифрованием или без (проще)
 - LVM для гибкого управления разделами
 - SSH только по ключам
 - Firewall настроен
+
+### 🔧 Простота установки
+- **Версии без LUKS** - решают проблемы загрузки
+- Автоматическая загрузка без паролей
+- Отсутствие сложностей с initrd
 
 ### 🎮 Gaming Ready
 - Steam предустановлен
@@ -52,20 +57,24 @@
 
 #### 1. 🤖 Автоматизированная установка
 ```bash
-# Русский интерфейс
-sudo ./automated-install.sh
+# С LUKS шифрованием (сложнее)
+sudo ./automated-install.sh           # Русский
+sudo ./automated-install-en.sh        # English
 
-# English interface (if Cyrillic issues)
-sudo ./automated-install-en.sh
+# БЕЗ шифрования (проще, рекомендуется)
+sudo ./automated-install-no-luks.sh    # Русский
+sudo ./automated-install-no-luks-en.sh # English
 ```
 
 #### 2. 🔧 Полуавтоматизированная (рекомендуется)
 ```bash
-# Русский интерфейс  
-sudo ./semi-automated-install.sh
+# С LUKS шифрованием (сложнее)
+sudo ./semi-automated-install.sh      # Русский
+sudo ./semi-automated-install-en.sh   # English
 
-# English interface (if Cyrillic issues)
-sudo ./semi-automated-install-en.sh
+# БЕЗ шифрования (проще, рекомендуется)
+sudo ./semi-automated-install-no-luks.sh    # Русский
+sudo ./semi-automated-install-no-luks-en.sh # English
 ```
 
 #### 3. 📖 Ручная установка
@@ -78,7 +87,11 @@ sudo ./fix-tty-encoding.sh
 
 #### 🚨 Проблемы загрузки после установки?
 ```bash
+# Русский интерфейс
 sudo ./fix-boot-luks.sh
+
+# English interface
+sudo ./fix-boot-luks-en.sh
 ```
 
 **Подробности**: [INSTALLATION.md](INSTALLATION.md) | [BOOT-TROUBLESHOOTING.md](BOOT-TROUBLESHOOTING.md)

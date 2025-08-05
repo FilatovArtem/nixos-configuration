@@ -15,9 +15,13 @@ nix-shell -p git
 git clone https://github.com/your-username/nixos-configuration.git
 cd nixos-configuration
 
-# Запустите исправление
+# Запустите исправление (русский интерфейс)
 chmod +x fix-boot-luks.sh
 sudo ./fix-boot-luks.sh
+
+# ИЛИ английский интерфейс
+chmod +x fix-boot-luks-en.sh
+sudo ./fix-boot-luks-en.sh
 ```
 
 ## 🔍 Ручное исправление

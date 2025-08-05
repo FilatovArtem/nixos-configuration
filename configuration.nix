@@ -26,16 +26,8 @@
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
-      timeout = 5;
     };
-    
-    # LUKS encryption (ваши настройки)
-    initrd.luks.devices."nixos-root" = {
-      device = "/dev/nvme0n1p2";
-      preLVM = true;
-      allowDiscards = true;
-    };
-    
+
     # Hibernation
     resumeDevice = "/dev/vg0/swap";
     kernelParams = [ 

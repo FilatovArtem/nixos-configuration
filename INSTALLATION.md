@@ -146,6 +146,7 @@ sudo ./semi-automated-install.sh
 - `automated-install.sh` / `automated-install-en.sh`
 - `semi-automated-install.sh` / `semi-automated-install-en.sh`  
 - `fix-tty-encoding.sh` - исправление кодировки TTY
+- `fix-boot-luks.sh` / `fix-boot-luks-en.sh` - исправление проблем загрузки
 
 ## 🎮 Что включено во всех методах
 
