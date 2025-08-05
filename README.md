@@ -52,16 +52,29 @@
 
 #### 1. 🤖 Автоматизированная установка
 ```bash
+# Русский интерфейс
 sudo ./automated-install.sh
+
+# English interface (if Cyrillic issues)
+sudo ./automated-install-en.sh
 ```
 
 #### 2. 🔧 Полуавтоматизированная (рекомендуется)
 ```bash
+# Русский интерфейс  
 sudo ./semi-automated-install.sh
+
+# English interface (if Cyrillic issues)
+sudo ./semi-automated-install-en.sh
 ```
 
 #### 3. 📖 Ручная установка
 Следуйте [подробной инструкции](nixos-installation-guide.md)
+
+#### 🔧 Проблемы с кириллицей в TTY?
+```bash
+sudo ./fix-tty-encoding.sh
+```
 
 **Подробности**: [INSTALLATION.md](INSTALLATION.md)
 
